@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <label> Code de votre partie:</label>
+    <br />
+    <p id="code"></p>
+    <br />
+    <br />
+    <button id="go" onclick="envoiReponses(test),joingame()">
+      Lancer votre partie
+    </button>
+    <br />
+    <br />
+    <span> Rejoindre une partie ? </span>
+    <br />
+    <br />
+    <input type="text" />
+    <button id="go">rejoindre une partie</button>
+
+    <script>
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+      //
+      function launchgame() {}
+      function joingame() {
+        document.location.href = "https://s80uz0.sse.codesandbox.io/?action";
+        document.location.href =
+          "https://s80uz0.sse.codesandbox.io/?action=" + test;
+      }
+      code.innerHTML = getRandomInt(200);
+      test = code.innerHTML;
+
+      var maSocket = io.connect();
+      function envoiReponses(test) {
+        console.log(test);
+        maSocket.emit("reponseDuClients", test);
+      }
+    </script>
+  </body>
+</html>

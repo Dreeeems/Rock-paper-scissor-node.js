@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Socket.io</title>
+    <style>
+      button {
+        border: none;
+      }
+      #b0 {
+        width: 200px;
+        height: 200px;
+        background-image: url("img/Main3.png");
+        background-size: contain;
+        background-position: center;
+        background-color: transparent;
+        background-repeat: no-repeat;
+      }
+      #b1 {
+        width: 200px;
+        height: 200px;
+        background-image: url("img/Main.png");
+        background-size: contain;
+        background-position: center;
+        background-color: transparent;
+        background-repeat: no-repeat;
+      }
+
+      #b2 {
+        width: 200px;
+        height: 200px;
+        background-image: url("img/Main2.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: transparent;
+      }
+      #container {
+        width: 60%;
+        height: 700px;
+        border: solid 1px black;
+        border-radius: 90px;
+        margin-left: 10%;
+        margin-right: 10%;
+        background: pink;
+      }
+      #image {
+        margin-top: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #texte_status {
+        margin-left: 40%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        vertical-align: center;
+        height: 5%;
+        width: 20%;
+        border: 1px black solid;
+        border-radius: 90px;
+        background: orange;
+      }
+      #message {
+        border: 1px black solid;
+        width: 20%;
+        height: 500px;
+        float: right;
+      }
+      form {
+        display: flex;
+        justify-content: right;
+        float: right;
+        position: relative;
+
+        bottom: 150px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Pierre Feuille Ciseau</h1>
+    <div id="message"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var maSocket = io.connect();
+      var cpt = 0;
+      maSocket.on("update", function (message) {
+        document.getElementById("texte_status").innerHTML = message;
+      });
+      function envoiReponse(rep) {
+        maSocket.emit("reponseDuClient", rep);
+      }
+      maSocket.on("texteFinal", function (message) {
+        document.getElementById("zone_texte_final").innerHTML = message;
+      });
+      maSocket.on("scoreJ1", function (victoirej1) {
+        document.getElementById("score_joueur1").innerHTML = victoirej1;
+      });
+
+      maSocket.on("scoreJ2", function (victoirej2) {
+        document.getElementById("score_joueur2").innerHTML = victoirej2;
+      });
+      window.onload = () => {
+        document.querySelector("form").addEventListener("submit", (e) => {
+          e.preventDefault();
+          console.log("formulaire envoyé");
+          const mp = document.querySelector("#messages").value;
+          document.querySelector("#messages");
+          maSocket.emit("mp", mp);
+          let mes = document.getElementById("messages");
+          mes.value = "";
+        });
+      };
+
+      maSocket.on("mp", (mp) => {
+        if (cpt === 10) {
+          document.getElementById("message").innerHTML = "";
+          cpt = 0;
+        }
+        document.getElementById("message").innerHTML += mp;
+        cpt++;
+      });
+    </script>
+    <div id="container">
+      <p id="texte_status"></p>
+      <br />
+      <h3>Score</h3>
+      <br />
+      <span>Joueur1</span>
+      <p id="score_joueur1"></p>
+      <span>Joueur2</span>
+      <p id="score_joueur2"></p>
+      <p id="choix du joueur>"></p>
+      <p id="zone_texte_final"></p>
+      <p id="result"></p>
+      <div id="image">
+        <button id="b0" onclick="envoiReponse(0) ;">Pierre</button>
+        <button id="b1" onclick="envoiReponse(1) ;">Feuille</button>
+        <button id="b2" onclick="envoiReponse(2) ;">Ciseau</button>
+      </div>
+    </div>
+
+    <form>
+      <input type="text" id="messages" />
+      /<button>Envoyer</button>
+    </form>
+  </body>
+</html>
